@@ -30,3 +30,99 @@
 *.exe
 *.out
 *.app
+
+# ===============================
+# Build artifacts
+# ===============================
+*.o
+*.obj
+*.ko
+*.mod
+*.mod.*
+*.cmd
+*.a
+*.so
+*.out
+*.elf
+*.bin
+*.img
+*.iso
+*.map
+*.d
+*.lst
+
+# Bootloader
+*.efi
+*.efi.stub
+
+# QEMU / Bochs output
+*.log
+*.qlog
+*.lock
+*.dump
+*.vdi
+*.vmdk
+*.qcow2
+*.qemu
+*.bochsout
+
+# GRUB build output
+/iso/
+/grub/
+/boot/
+
+# Cargo (for Rust-based kernels)
+target/
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+#Makefile
+build/
+out/
+
+# Visual Studio Code
+.vscode/
+
+# CLion & JetBrains
+.idea/
+
+# Sublime
+*.sublime-workspace
+*.sublime-project
+
+# macOS
+.DS_Store
+
+# Linux
+*~
+
+# Windows
+Thumbs.db
+desktop.ini
+
+# Cross compiler binaries
+/cross/
+/toolchain/
+/gcc-cross/
+/binutils-cross/
+
+# LLVM / Clang LTO cache
+*.lto.*
+
+# QEMU nvram (UEFI)
+*.fd
+*.nvram
+
+# GDB history
+.gdb_history
+
+# Dump files (memory dumps)
+*.core
+*.dump
+
+# Temporary files
+*.tmp
+*.temp
+tmp/
