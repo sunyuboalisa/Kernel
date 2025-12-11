@@ -2,22 +2,27 @@ CC = aarch64-elf-gcc
 LD = aarch64-elf-ld
 OBJCOPY = aarch64-elf-objcopy
 
-CFLAGS = -ffreestanding -O2 -nostdlib -nostartfiles
+CFLAGS = -ffreestanding -O2 -nostdlib -nostartfiles -Wall -Wextra
 LDFLAGS = -T linker.ld
+
+OBJS = boot.o kernel.o uart.o exception.o exception_init.o exception_vectors.o
 
 all: kernel.bin
 
-kernel.elf: boot.o kernel.o
-	$(LD) $(LDFLAGS) -o kernel.elf boot.o kernel.o
+kernel.elf: $(OBJS)
+	$(LD) $(LDFLAGS) -o $@ $(OBJS)
 
 kernel.bin: kernel.elf
-	$(OBJCOPY) -O binary kernel.elf kernel.bin
+	$(OBJCOPY) -O binary $< $@
 
 boot.o: boot.S
-	$(CC) $(CFLAGS) -c boot.S -o boot.o
+	$(CC) $(CFLAGS) -c $< -o $@
 
-kernel.o: kernel.c
-	$(CC) $(CFLAGS) -c kernel.c -o kernel.o
+exception_vectors.o: exception.S
+	$(CC) $(CFLAGS) -c $< -o $@
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
 run: all
 	qemu-system-aarch64 -M virt -cpu cortex-a53 -nographic -serial mon:stdio -kernel kernel.bin

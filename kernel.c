@@ -1,22 +1,24 @@
-typedef unsigned int u32;
-typedef unsigned long u64;
+#include "types.h"
+#include "uart.h"
+#include "exception.h"
 
-// UART 输出（QEMU virt 机器）
-void uart_putc(char c) {
-    volatile u32 *UART0 = (volatile u32 *)0x09000000;
-    while (*(UART0 + 0x18/4) & (1 << 5)); // TXFF
-    *UART0 = c;
-}
-
-void uart_puts(const char *s) {
-    while (*s) uart_putc(*s++);
-}
-
-void kernel_main() {
+void kernel_main(void) {
+    uart_init();
     uart_puts("Hello ARM64 Kernel!\n");
 
-    // 内核主循环
-    for (int i = 0; i < 10; i++) {
-    uart_puts("Tick\n");
-}
+    init_exceptions();
+    uart_puts("Exceptions inited\n");
+
+    uart_puts("Tick (5 times):\n");
+    for (int i = 0; i < 5; i++) {
+        uart_puts("Tick\n");
+        for (volatile int j = 0; j < 10000000; j++); // crude delay
+    }
+
+    // 若要测试异常处理：取消下面两行注释（读 0 地址）
+    // volatile u32 *p = (volatile u32 *)0x0;
+    // volatile u32 x = *p;
+
+    uart_puts("End of kernel_main — entering wait loop\n");
+    while (1) { asm volatile("wfe"); }
 }
